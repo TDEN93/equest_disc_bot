@@ -49,5 +49,23 @@ class MyClient(discord.Client):
                 await message.channel.send('{0}'
                 .format(contents))
 
+        if message.content.startswith("!completed"):
+            msg = message.content
+            f=open("completed_tasks.txt", "a+")
+            f.write("Completed Task(s)\n")
+            f.write("Date: {0}\n".format(day))
+            f.write("Author: {0.author.mention}\n".format(message))
+            f.write("Tasks: {0}".format(msg.replace("!completed", "")))
+            await message.channel.send('Added Task Completion')
+
+        if message.content.startswith("!ctasks"):
+            f=open("completed_tasks.txt", "r")
+            if os.stat("completed_tasks.txt").st_size == 0:
+                await message.channel.send('There are no completed tasks')
+            elif f.mode == 'r':
+                contents = f.read()
+                await message.channel.send('{0}'
+                .format(contents))
+
 client = MyClient()
 client.run(os.environ['DISC_TOKEN'])
